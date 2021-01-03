@@ -16,6 +16,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
@@ -63,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.textView);
+
+        //Report a text
+        TextView link = findViewById(R.id.textView4);
+        String linkText = "<a href='https://bikewise.org/'>Report a theft</a>";
+        link.setText(Html.fromHtml(linkText));
+        link.setMovementMethod(LinkMovementMethod.getInstance());
+        //Report a text
+
 
         if ((ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) &&
                 (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
@@ -177,12 +187,14 @@ public class MainActivity extends AppCompatActivity {
 
                 //Create new cardview
                 CardView tempCard = new CardView(this);
+                tempCard.setRadius(10);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                lp.setMargins(20, 20, 20, 20);
+                lp.setMargins(20, 30, 20, 20);
                 tempCard.setLayoutParams(lp);
                 TextView newText = new TextView(this);
                 newText.setAutoLinkMask(Linkify.ALL);
                 newText.setText("  " + title + "\n     " + "Date occurred:" + "  " + newDate + "\n  "+ String.valueOf(htmlURL));
+                newText.setLineSpacing(20,1);
                 tempCard.addView(newText);
                 //Add to scrollView
                 layout.addView(tempCard);
@@ -195,16 +207,16 @@ public class MainActivity extends AppCompatActivity {
 
             if (theftsInPastYear == 0){
                 cardView.setCardBackgroundColor(Color.GREEN);
-                textView2.setText("Insignificant Risk");
+                textView2.setText("INSIGNIFICANT RISK");
             } else if ((theftsInPastYear > 0) && (theftsInPastYear <=10)){
                 cardView.setCardBackgroundColor(Color.parseColor("#48FFFF00"));
-                textView2.setText("Minor Risk");
+                textView2.setText("MINOR RISK");
             } else if((theftsInPastYear > 10) && (theftsInPastYear <=30)){
                 cardView.setCardBackgroundColor(Color.parseColor("#9CFFD740"));
-                textView2.setText("Medium Risk");
+                textView2.setText("MEDIUM RISK");
             } else if (theftsInPastYear>30){
                 cardView.setCardBackgroundColor(Color.parseColor("#95FF0000"));
-                textView2.setText("Major Risk");
+                textView2.setText("MAJOR RISK");
             }
         } catch (JSONException e) {
             e.printStackTrace();
